@@ -14,10 +14,10 @@ RUN npm ci --only=production
 COPY server.js ./
 
 # Expose port 80 for ECS
-EXPOSE 8080
+EXPOSE 80
 
 # Set default environment variables
-ENV PORT=8080
+ENV PORT=80
 ENV HOST=0.0.0.0
 ENV NODE_ENV=production
 

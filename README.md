@@ -66,6 +66,8 @@ docker run -p 3000:80 -e PORT=80 ecs-fastify
 
 ### Pushing to Amazon ECR
 
+AWS account id - 241533138370
+
 1. Authenticate Docker to ECR:
 ```bash
 aws ecr get-login-password --region <region> | docker login --username AWS --password-stdin <account-id>.dkr.ecr.<region>.amazonaws.com
