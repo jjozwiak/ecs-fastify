@@ -1,5 +1,5 @@
 # Use official Node.js runtime as base image
-FROM node:20-alpine
+FROM --platform=linux/amd64 node:20-alpine
 
 # Set working directory
 WORKDIR /app
@@ -13,11 +13,11 @@ RUN npm ci --only=production
 # Copy application code
 COPY server.js ./
 
-# Expose port 80 for ECS
-EXPOSE 80
+# Expose port 3000 (non-privileged port for non-root user)
+EXPOSE 3000
 
 # Set default environment variables
-ENV PORT=80
+ENV PORT=3000
 ENV HOST=0.0.0.0
 ENV NODE_ENV=production
 
