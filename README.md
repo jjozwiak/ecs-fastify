@@ -70,17 +70,17 @@ AWS account id - 241533138370
 
 1. Authenticate Docker to ECR:
 ```bash
-aws ecr get-login-password --region <region> | docker login --username AWS --password-stdin <account-id>.dkr.ecr.<region>.amazonaws.com
+aws ecr get-login-password --region us-east-1 | docker login --username AWS --password-stdin 241533138370.dkr.ecr.us-east-1.amazonaws.com
 ```
 
 2. Tag the image:
 ```bash
-docker tag ecs-fastify:latest <account-id>.dkr.ecr.<region>.amazonaws.com/<repository-name>:latest
+docker tag ecs-fastify:latest 241533138370.dkr.ecr.us-east-1.amazonaws.com/ecs-fastify:latest
 ```
 
 3. Push the image:
 ```bash
-docker push <account-id>.dkr.ecr.<region>.amazonaws.com/<repository-name>:latest
+docker push 241533138370.dkr.ecr.us-east-1.amazonaws.com/ecs-fastify:latest
 ```
 
 ### ECS Configuration
