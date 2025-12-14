@@ -2,7 +2,7 @@ const fastify = require('fastify')({ logger: true });
 
 // Hello World route
 fastify.get('/', async (request, reply) => {
-  return { message: 'Merry Christmas!' };
+  return { message: 'Merry Christmas! Happy New Year!' };
 });
 
 // Health check route
