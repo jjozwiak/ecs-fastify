@@ -3,4 +3,4 @@
       "name": "fastify",
       "imageUri": "241533138370.dkr.ecr.us-east-1.amazonaws.com/ecs-fastify:latest"
     }
-  ]
+]
