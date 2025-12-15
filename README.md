@@ -86,7 +86,64 @@ docker push 241533138370.dkr.ecr.us-east-1.amazonaws.com/ecs-fastify:latest
 ### ECS Configuration
 
 The container is configured to:
-- Listen on port 80 (required for ECS service routing)
+- Listen on port 3000 (mapped via ECS service/load balancer)
 - Run as a non-root user for security
 - Use production-optimized Node.js Alpine image
+
+## CI/CD Pipeline (AWS CodePipeline)
+
+This project includes a `buildspec.yml` for AWS CodeBuild that automatically builds and pushes Docker images to ECR.
+
+### Pipeline Setup
+
+1. **Create a CodePipeline** in the AWS Console
+2. **Source Stage**: Connect to your repository (GitHub, CodeCommit, etc.)
+3. **Build Stage**: Create a CodeBuild project with the following settings:
+   - **Environment image**: Managed image
+   - **Operating system**: Amazon Linux 2
+   - **Runtime**: Standard
+   - **Image**: `aws/codebuild/amazonlinux2-x86_64-standard:5.0`
+   - **Privileged**: ✅ Enabled (required for Docker builds)
+   - **Service role**: Needs ECR push permissions (see below)
+
+4. **Deploy Stage** (optional): Add ECS deploy action using the `imagedefinitions.json` artifact
+
+### Required IAM Permissions
+
+The CodeBuild service role needs these permissions:
+
+```json
+{
+  "Version": "2012-10-17",
+  "Statement": [
+    {
+      "Effect": "Allow",
+      "Action": [
+        "ecr:GetAuthorizationToken"
+      ],
+      "Resource": "*"
+    },
+    {
+      "Effect": "Allow",
+      "Action": [
+        "ecr:BatchCheckLayerAvailability",
+        "ecr:GetDownloadUrlForLayer",
+        "ecr:BatchGetImage",
+        "ecr:PutImage",
+        "ecr:InitiateLayerUpload",
+        "ecr:UploadLayerPart",
+        "ecr:CompleteLayerUpload"
+      ],
+      "Resource": "arn:aws:ecr:us-east-1:241533138370:repository/ecs-fastify"
+    }
+  ]
+}
+```
+
+### Build Output
+
+The build produces:
+- Docker image tagged with the git commit hash (e.g., `abc1234`)
+- Docker image tagged as `latest`
+- `imagedefinitions.json` artifact for ECS deployment
 
