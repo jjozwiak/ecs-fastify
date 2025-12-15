@@ -10,6 +10,22 @@ fastify.get('/health', async (request, reply) => {
   return { status: 'ok' };
 });
 
+// Graceful shutdown handler
+const shutdown = async (signal) => {
+  fastify.log.info(`Received ${signal}, shutting down gracefully...`);
+  try {
+    await fastify.close();
+    fastify.log.info('Server closed');
+    process.exit(0);
+  } catch (err) {
+    fastify.log.error('Error during shutdown:', err);
+    process.exit(1);
+  }
+};
+
+process.on('SIGTERM', () => shutdown('SIGTERM'));
+process.on('SIGINT', () => shutdown('SIGINT'));
+
 // Start server
 const start = async () => {
   try {
@@ -25,4 +41,3 @@ const start = async () => {
 };
 
 start();
-

@@ -8,4 +8,6 @@ README.md
 *.log
 .vscode
 .idea
-
+aws
+Dockerfile
+.dockerignore
